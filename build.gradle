@@ -33,6 +33,22 @@ dependencies {
 	runtimeOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
 	compileOnly 'org.projectlombok:lombok'
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	providedRuntime 'com.github.jsimone:webapp-runner:8.5.11.3'
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat' 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
+
+task stage() {
+    dependsOn clean, bootWar
+}
+
+bootWar.mustRunAfter clean
+
+task copyToLib(type: Copy) {
+    into "$buildDir/server"
+    from(configurations.providedRuntime) {
+        include "webapp-runner*"
+    }
+}
+
+stage.dependsOn(copyToLib)
