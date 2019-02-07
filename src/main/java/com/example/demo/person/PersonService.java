@@ -13,8 +13,13 @@ import org.springframework.stereotype.Service;
 public class PersonService implements IPersonService {
 
 	/** The person repository. */
-	@Autowired
+
 	private PersonRespository personRepository;
+
+	@Autowired
+	public PersonService(PersonRespository personRepository) {
+		this.personRepository = personRepository;
+	}
 
 	/*
 	 * (non-Javadoc)
