@@ -13,6 +13,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
@@ -56,8 +58,10 @@ public class Person implements Serializable {
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "person_group", joinColumns = @JoinColumn(name = "pid", referencedColumnName = "pid"), inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"))
-	@JsonManagedReference
-	@ToString.Exclude @EqualsAndHashCode.Exclude private Set<Group> groups;
+	@JsonBackReference
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
+	private Set<Group> groups;
 
 	public Person(long pid, @NonNull String name, String middleName, @NonNull String surname, String email,
 			String phone, Set<Group> groups) {
@@ -70,7 +74,5 @@ public class Person implements Serializable {
 		this.phone = phone;
 		this.groups = groups;
 	}
-
-	
 
 }

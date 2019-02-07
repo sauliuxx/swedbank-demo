@@ -2,6 +2,7 @@ package com.example.demo.person;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,8 +54,8 @@ public class PersonService implements IPersonService {
 	 */
 	@Override
 	public boolean addPerson(final Person person) {
-		Person p = personRepository.findById(person.getPid()).get();
-		if (p.getPid() > 0)
+		Optional<Person> p = personRepository.findById(person.getPid());
+		if (p.isPresent())
 			return false;
 		else {
 			personRepository.save(person);

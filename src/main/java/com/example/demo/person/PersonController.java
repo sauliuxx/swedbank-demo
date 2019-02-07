@@ -1,5 +1,7 @@
 package com.example.demo.person;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.UriComponentsBuilder;
-
 
 /**
  * The Class PersonController.
@@ -62,6 +63,22 @@ public class PersonController {
 	public ResponseEntity<List<Person>> getPersons() {
 		List<Person> list = personService.getAllPersons();
 		return new ResponseEntity<List<Person>>(list, HttpStatus.OK);
+	}
+
+	/**
+	 * Gets the person groups.
+	 *
+	 * @param pid the pid
+	 * @return the person groups
+	 */
+	@GetMapping("person/{pid}/groups")
+	public ResponseEntity<Collection<Group>> getPersonGroups(@PathVariable("pid") Long pid) {
+		Person person = personService.getPersonId(pid);
+		if (person != null) {
+			return new ResponseEntity<Collection<Group>>(person.getGroups(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Collection<Group>>(new HashSet<Group>(), HttpStatus.NOT_FOUND);
+		}
 	}
 
 	/**
