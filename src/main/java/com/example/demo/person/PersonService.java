@@ -59,7 +59,7 @@ public class PersonService implements IPersonService {
 			return false;
 		else {
 			personRepository.save(person);
-			return false;
+			return true;
 		}
 	}
 
