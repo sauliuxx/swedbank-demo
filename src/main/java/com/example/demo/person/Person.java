@@ -59,6 +59,7 @@ public class Person implements Serializable {
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "person_group", joinColumns = @JoinColumn(name = "pid", referencedColumnName = "pid"), inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"))
 	@JsonBackReference
+	@JsonIgnoreProperties("groups")
 	@ToString.Exclude
 	@EqualsAndHashCode.Exclude
 	private Set<Group> groups;
