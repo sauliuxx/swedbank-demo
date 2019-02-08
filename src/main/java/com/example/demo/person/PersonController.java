@@ -59,7 +59,7 @@ public class PersonController {
 	 * @return the persons
 	 */
 	@GetMapping("persons")
-	@CrossOrigin(origins = "http://localhost:4200")
+	@CrossOrigin(origins = "*")
 	public ResponseEntity<List<Person>> getPersons() {
 		List<Person> list = personService.getAllPersons();
 		return new ResponseEntity<List<Person>>(list, HttpStatus.OK);
