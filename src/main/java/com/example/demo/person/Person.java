@@ -3,16 +3,9 @@ package com.example.demo.person;
 import java.io.Serializable;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import com.example.demo.task.Task;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -63,6 +56,9 @@ public class Person implements Serializable {
 	@ToString.Exclude
 	@EqualsAndHashCode.Exclude
 	private Set<Group> groups;
+
+	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Task> tasks;
 
 	public Person(long pid, @NonNull String name, String middleName, @NonNull String surname, String email,
 			String phone, Set<Group> groups) {

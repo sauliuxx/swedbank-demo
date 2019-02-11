@@ -1,13 +1,11 @@
 package com.example.demo.task;
 
+import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import com.example.demo.person.Person;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,7 +16,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "task")
 @Data
-public class Task {
+public class Task implements Serializable {
+
+
+	private static final long serialVersionUID = 6132012612721760387L;
 
 	/** The id. */
 	@Id
@@ -39,6 +40,10 @@ public class Task {
 	/** The end date. */
 	@Column(name = "end_date")
 	private Date endDate;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "person_id")
+	private Person person;
 
 	/**
 	 * Instantiates a new task.
