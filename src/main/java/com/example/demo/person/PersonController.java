@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.example.demo.group.Group;
+
 /**
  * The Class PersonController.
  */
 @Controller
-@RequestMapping("api")
+@RequestMapping("api/persons")
 public class PersonController {
 
 	/** The person service. */
@@ -45,7 +47,7 @@ public class PersonController {
 	 * @param pid the pid
 	 * @return the person by pid
 	 */
-	@GetMapping("person/{pid}")
+	@GetMapping("{pid}")
 	public ResponseEntity<Person> getPersonByPid(@PathVariable("pid") Long pid) {
 
 		Person person = personService.getPersonId(pid);
@@ -58,7 +60,7 @@ public class PersonController {
 	 *
 	 * @return the persons
 	 */
-	@GetMapping("persons")
+	@GetMapping
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<List<Person>> getPersons() {
 		List<Person> list = personService.getAllPersons();
@@ -71,7 +73,7 @@ public class PersonController {
 	 * @param pid the pid
 	 * @return the person groups
 	 */
-	@GetMapping("person/{pid}/groups")
+	@GetMapping("{pid}/groups")
 	public ResponseEntity<Collection<Group>> getPersonGroups(@PathVariable("pid") Long pid) {
 		Person person = personService.getPersonId(pid);
 		if (person != null) {
@@ -88,7 +90,7 @@ public class PersonController {
 	 * @param builder the builder
 	 * @return the response entity
 	 */
-	@PostMapping("person")
+	@PostMapping
 	public ResponseEntity<Void> addPerson(@RequestBody Person person, UriComponentsBuilder builder) {
 		boolean success = personService.addPerson(person);
 		if (!success) {
@@ -105,7 +107,7 @@ public class PersonController {
 	 * @param person the person
 	 * @return the response entity
 	 */
-	@PutMapping("person")
+	@PutMapping
 	public ResponseEntity<Person> updateArticle(@RequestBody Person person) {
 		personService.updatePerson(person);
 		return new ResponseEntity<Person>(person, HttpStatus.OK);
@@ -117,7 +119,7 @@ public class PersonController {
 	 * @param pid the pid
 	 * @return the response entity
 	 */
-	@DeleteMapping("person/{pid}")
+	@DeleteMapping("{pid}")
 	public ResponseEntity<Void> deleteArticle(@PathVariable("pid") Long pid) {
 		personService.deletePerson(pid);
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);

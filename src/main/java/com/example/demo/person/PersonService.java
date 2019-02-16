@@ -17,6 +17,11 @@ public class PersonService implements IPersonService {
 
 	private PersonRespository personRepository;
 
+	/**
+	 * Instantiates a new person service.
+	 *
+	 * @param personRepository the person repository
+	 */
 	@Autowired
 	public PersonService(PersonRespository personRepository) {
 		this.personRepository = personRepository;
