@@ -7,6 +7,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.person.exception.PersonNotFoundException;
+
+// TODO: Auto-generated Javadoc
 /**
  * The Class PersonService.
  */
@@ -30,10 +33,10 @@ public class PersonService implements IPersonService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.example.demo.person.IPersonService#getAllPersons()
+	 * @see com.example.demo.person.IPersonService#getAll()
 	 */
 	@Override
-	public List<Person> getAllPersons() {
+	public List<Person> getAll() {
 		List<Person> list = new ArrayList<Person>();
 		personRepository.findAll().forEach(e -> list.add(e));
 		return list;
@@ -42,11 +45,11 @@ public class PersonService implements IPersonService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.example.demo.person.IPersonService#getPersonId(long)
+	 * @see com.example.demo.person.IPersonService#getById(long)
 	 */
 	@Override
-	public Person getPersonId(final long pid) {
-		Person person = personRepository.findById(pid).get();
+	public Person getById(final long pid) throws PersonNotFoundException {
+		Person person = personRepository.findById(pid).orElseThrow(() -> new PersonNotFoundException(pid));
 		return person;
 	}
 
@@ -54,11 +57,10 @@ public class PersonService implements IPersonService {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * com.example.demo.person.IPersonService#addPerson(com.example.demo.person.
-	 * Person)
+	 * com.example.demo.person.IPersonService#save(com.example.demo.person.Person)
 	 */
 	@Override
-	public boolean addPerson(final Person person) {
+	public boolean save(final Person person) {
 		Optional<Person> p = personRepository.findById(person.getPid());
 		if (p.isPresent())
 			return false;
@@ -72,11 +74,10 @@ public class PersonService implements IPersonService {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * com.example.demo.person.IPersonService#updatePerson(com.example.demo.person.
-	 * Person)
+	 * com.example.demo.person.IPersonService#update(com.example.demo.person.Person)
 	 */
 	@Override
-	public void updatePerson(final Person person) {
+	public void update(final Person person) {
 		personRepository.save(person);
 
 	}
@@ -84,11 +85,35 @@ public class PersonService implements IPersonService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.example.demo.person.IPersonService#deletePerson(long)
+	 * @see com.example.demo.person.IPersonService#delete(long)
 	 */
 	@Override
-	public void deletePerson(final long pid) {
+	public void delete(final long pid) throws PersonNotFoundException {
+		Person person = personRepository.findById(pid).orElseThrow(()-> new PersonNotFoundException(pid));
 		personRepository.deleteById(pid);
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.example.demo.person.IPersonService#deleteAll()
+	 */
+	@Override
+	public void deleteAll() {
+		personRepository.deleteAll();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.example.demo.person.IPersonService#saveAndFlush(com.example.demo.person.
+	 * Person)
+	 */
+	@Override
+	public void saveAndFlush(Person person) {
+		personRepository.saveAndFlush(person);
 
 	}
 

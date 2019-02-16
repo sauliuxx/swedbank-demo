@@ -2,6 +2,7 @@ package com.example.demo.person;
 
 import java.util.List;
 
+import com.example.demo.person.exception.PersonNotFoundException;
 
 /**
  * The Interface IPersonService.
@@ -9,39 +10,52 @@ import java.util.List;
 public interface IPersonService {
 
 	/**
-	 * Gets the all persons.
+	 * Gets the all.
 	 *
-	 * @return the all persons
+	 * @return the all
 	 */
-	List<Person> getAllPersons();
+	List<Person> getAll();
 
 	/**
-	 * Gets the person id.
+	 * Gets the by id.
 	 *
 	 * @param pid the pid
-	 * @return the person id
+	 * @return the by id
+	 * @throws PersonNotFoundException the person not found exception
 	 */
-	Person getPersonId(long pid);
+	Person getById(long pid) throws PersonNotFoundException;
 
 	/**
-	 * Adds the person.
+	 * Save.
 	 *
 	 * @param person the person
 	 * @return true, if successful
 	 */
-	boolean addPerson(Person person);
+	boolean save(Person person);
 
 	/**
-	 * Update person.
+	 * Update.
 	 *
 	 * @param person the person
 	 */
-	void updatePerson(Person person);
+	void update(Person person);
 
 	/**
-	 * Delete person.
+	 * Delete.
 	 *
 	 * @param pid the pid
 	 */
-	void deletePerson(long pid);
+	void delete(long pid) throws PersonNotFoundException;
+
+	/**
+	 * Delete all.
+	 */
+	void deleteAll();
+
+	/**
+	 * Save and flush.
+	 *
+	 * @param person the person
+	 */
+	void saveAndFlush(Person person);
 }

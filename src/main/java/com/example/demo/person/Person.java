@@ -12,11 +12,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.example.demo.group.Group;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -37,19 +37,25 @@ public class Person implements Serializable {
 	private static final long serialVersionUID = -2268562508199413550L;
 
 	/** The pid. */
-	private @Id long pid;
+	@Id
+	@NotNull
+	private long pid;
 
 	/** The name. */
+	@NotNull
+	@NotBlank
 	@Column(name = "first_name")
-	private @NonNull String name;
+	private String name;
 
 	/** The middle name. */
 	@Column(name = "middle_name")
 	private String middleName;
 
 	/** The surname. */
+	@NotNull
+	@NotBlank
 	@Column(name = "last_name")
-	private @NonNull String surname;
+	private String surname;
 
 	/** The email. */
 	private String email;
@@ -57,11 +63,10 @@ public class Person implements Serializable {
 	/** The phone. */
 	private String phone;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST }, fetch = FetchType.EAGER)
 	@JoinTable(name = "person_group", joinColumns = @JoinColumn(name = "pid", referencedColumnName = "pid"), inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"))
-	@JsonBackReference
-	@JsonIgnoreProperties("groups")
 	@ToString.Exclude
+	@JsonIgnore
 	@EqualsAndHashCode.Exclude
 	private Set<Group> groups;
 

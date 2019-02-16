@@ -3,20 +3,17 @@ package com.example.demo.group;
 import java.io.Serializable;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.example.demo.person.Person;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -41,7 +38,7 @@ public class Group implements Serializable {
 	/** The id. */
 	@Id
 	@Column(name = "id", updatable = false, nullable = false)
-	@SequenceGenerator(name="group_generator", sequenceName = "group_sequence", allocationSize=1)
+	@SequenceGenerator(name = "group_generator", sequenceName = "group_sequence", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "group_generator")
 	private long id;
 
@@ -52,8 +49,8 @@ public class Group implements Serializable {
 	private String details;
 
 	/** The persons. */
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinTable(name = "person_group", joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "pid", referencedColumnName = "pid"))
+	@ManyToMany(mappedBy = "groups")
+	@JsonIgnore
 	@ToString.Exclude
 	@EqualsAndHashCode.Exclude
 	private Set<Person> persons;
