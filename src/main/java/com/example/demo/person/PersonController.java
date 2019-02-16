@@ -25,6 +25,7 @@ import com.example.demo.group.Group;
  * The Class PersonController.
  */
 @Controller
+@CrossOrigin(origins = "*")
 @RequestMapping("api/persons")
 public class PersonController {
 
@@ -61,7 +62,6 @@ public class PersonController {
 	 * @return the persons
 	 */
 	@GetMapping
-	@CrossOrigin(origins = "*")
 	public ResponseEntity<List<Person>> getPersons() {
 		List<Person> list = personService.getAllPersons();
 		return new ResponseEntity<List<Person>>(list, HttpStatus.OK);
