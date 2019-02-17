@@ -115,4 +115,10 @@ public class GroupService implements IGroupService {
 
 	}
 
+	@Override
+	public void saveAndFlush(Group group) {
+		groupRepository.saveAndFlush(group);
+		
+	}
+
 }

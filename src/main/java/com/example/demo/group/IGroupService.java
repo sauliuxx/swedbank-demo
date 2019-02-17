@@ -55,5 +55,7 @@ public interface IGroupService {
 	 * Delete all.
 	 */
 	void deleteAll();
+	
+	void saveAndFlush(Group group);
 
 }

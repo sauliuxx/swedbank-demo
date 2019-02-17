@@ -7,13 +7,21 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.example.demo.group.Group;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * The Class Task.
@@ -42,15 +50,21 @@ public class Task {
 
 	/** The start date. */
 	@NotNull
-	@NotBlank
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Europe/Vilnius")
 	@Column(name = "start_date")
 	private Date startDate;
 
 	/** The end date. */
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Europe/Vilnius")
 	@Column(name = "end_date")
 	private Date endDate;
-	
-	
+
+	@ManyToOne
+	@JoinColumn(name = "group_id", nullable = true)
+	@JsonIgnore
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
+	private Group group;
 
 	/**
 	 * Instantiates a new task.

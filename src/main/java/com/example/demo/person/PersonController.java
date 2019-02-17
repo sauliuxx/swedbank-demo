@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.example.demo.group.Group;
@@ -27,11 +27,10 @@ import com.example.demo.group.IGroupService;
 import com.example.demo.group.exception.GroupNotFoundException;
 import com.example.demo.person.exception.PersonNotFoundException;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class PersonController.
  */
-@Controller
+@RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("api/persons")
 public class PersonController {
@@ -49,7 +48,7 @@ public class PersonController {
 	 * Instantiates a new person controller.
 	 *
 	 * @param personService the person service
-	 * @param groupService the group service
+	 * @param groupService  the group service
 	 */
 	@Autowired
 	public PersonController(IPersonService personService, IGroupService groupService) {
@@ -130,13 +129,36 @@ public class PersonController {
 
 			personService.saveAndFlush(person);
 
-			return ResponseEntity.noContent().build();
+			return ResponseEntity.ok().build();
 
 		} catch (GroupNotFoundException | PersonNotFoundException ex) {
 			log.error("setGroup", ex);
 			return ResponseEntity.notFound().build();
 		}
 
+	}
+
+	@DeleteMapping("{pid}/groups/{id}")
+	public ResponseEntity<?> removeFromGroup(@PathVariable("pid") long pid, @PathVariable("id") long id) {
+		try {
+			Person person = personService.getById(pid);
+			Group group = groupService.findById(id);
+
+			Set<Group> groups = person.getGroups();
+
+			if (groups.contains(group)) {
+				groups.remove(group);
+				person.setGroups(groups);
+
+				personService.saveAndFlush(person);
+			}
+
+			return ResponseEntity.ok().build();
+
+		} catch (GroupNotFoundException | PersonNotFoundException ex) {
+			log.error("setGroup", ex);
+			return ResponseEntity.notFound().build();
+		}
 	}
 
 	/**
@@ -157,7 +179,6 @@ public class PersonController {
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 
-	
 	/**
 	 * Update person.
 	 *
@@ -170,7 +191,6 @@ public class PersonController {
 		return new ResponseEntity<Person>(person, HttpStatus.OK);
 	}
 
-	
 	/**
 	 * Delete person.
 	 *
@@ -181,7 +201,7 @@ public class PersonController {
 	public ResponseEntity<Void> deletePerson(@PathVariable("pid") Long pid) {
 		try {
 			personService.delete(pid);
-			return ResponseEntity.noContent().build();
+			return ResponseEntity.ok().build();
 		} catch (PersonNotFoundException e) {
 			log.error("deletePerson", e);
 			return ResponseEntity.notFound().build();

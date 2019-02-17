@@ -3,16 +3,20 @@ package com.example.demo.group;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.example.demo.person.Person;
+import com.example.demo.task.Task;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -54,6 +58,12 @@ public class Group implements Serializable {
 	@ToString.Exclude
 	@EqualsAndHashCode.Exclude
 	private Set<Person> persons;
+	
+	@OneToMany(mappedBy="group", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
+	@JsonIgnore
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
+    private Set<Task> tasks;
 
 	/**
 	 * Instantiates a new group.
